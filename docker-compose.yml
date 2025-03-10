@@ -1,0 +1,25 @@
+version: '3.8'  # Specify your Compose file version
+
+services:
+  fastapi-app:
+    build:
+      context: .
+    # image: 488092325391.dkr.ecr.us-east-2.amazonaws.com/ai-chatbot-dev:latest  # Specify the ECR image
+    volumes:
+      - /home/ubuntu/dev/Vitafy-AI-CHAT/data:/code/data  # Mount the local data directory
+    environment:
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+      - PINECONE_API_KEY=${PINECONE_API_KEY}
+      - PINECONE_ENVIRONMENT=${PINECONE_ENVIRONMENT}
+      - HUGGINGFACEHUB_API_TOKEN=${HUGGINGFACEHUB_API_TOKEN}
+      - NLTK_DATA=/root/nltk_data
+      - directory=/code/data  # Path inside the container
+      - base_directory=/code/data  # Path inside the container
+    ports:
+      - "8000:8000"
+    networks:
+      - vh-dev-network  # Reference the network by name
+
+networks:
+  vh-dev-network:
+    external: true  # Declare that this is an external network
